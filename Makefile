@@ -10,19 +10,26 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = 		minitalk.a
+SERVER = 		server.a
+CLIENTE = 		cliente.a
 
 SRC = 		cliente.c servidor.c 
 
-SRCBONUS =	cliente.c servidor_bonus.c
+# SRCBONUS =	cliente.c servidor_bonus.c
 
-OBJT = 		$(SRC:.c=.o)
+SERVER_OBJS = server.o
+CLIENTE_OBJS = cliente.o
 
-OBJTBONUS = $(SRCBONUS:.c=.o)
+# LIBRERIAS
+PRINTF = Ft_printf
+LIBFT = Libft
 
-CFLAGS = 	-Wall -Werror -Wextra
+# OBJTBONUS = $(SRCBONUS:.c=.o)
 
-all:		$(NAME)
+CFLAGS = 	-Wall -Werror -Wextra -I$(PRINTF)/headers -I$(LIBFT)/headers -L$(PRINTF) -lftprintf -L$(LIBFT) -lft
+
+all:		$(SERVER) $(CLIENTE)
+	@echo "Minital esta listo"
 
 $(NAME):
 			gcc -c $(CFLAGS) $(SRC)
@@ -34,9 +41,9 @@ clean:
 fclean: 	clean
 			rm -f $(NAME)
 
-bonus:
-			gcc -c $(CFLAGS) $(SRCBONUS)
-			ar rcs $(NAME) $(OBJTBONUS)
+# bonus:
+# 			gcc -c $(CFLAGS) $(SRCBONUS)
+# 			ar rcs $(NAME) $(OBJTBONUS)
 
 re: 		fclean all
 
