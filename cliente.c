@@ -19,7 +19,7 @@ void	ft_send(int pid, char c)
 	i = 0;
 	while (i < 8)
 	{
-		if (c && (1 << i) != 0)
+		if ((c & (1 << i)) != 0) // cuando se trata de bits, solo se pone un & y no dos
 		{
 			// (1 << c) mueve la posición del bit a la izquierda, y se mueve una posición sola porque el nº es binario. La primera vez que empieza esta en el final y al empezar el bucle se mueve una posición y ve el primer bit. CUando mueves ve solo de un bit a un bit, no ve los demás de la izq
 			// (1 << c) correcto: se deplaza hacia a la izquierda a  la posicion c (que es el contador), y en esa posicion escribe un 1			
@@ -64,4 +64,5 @@ int	main(int argc, char **argv)
 		ft_printf("Wrong Input Format!! \n");
 		ft_printf("The correct format is: ./client \"PID\" \"Text Message\" \n");
 	}
+	return (0);
 }

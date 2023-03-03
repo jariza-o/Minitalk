@@ -45,12 +45,12 @@ int	main(void)
 {
 	struct sigaction	sign;
 
-	ft_printf("Welocme to Minitalk Server. \nThe PID Server is: %d \n", getpid()); //escribe el mensaje de bienvenida  y te muestra el PID por pantalla
 	
 	sign.sa_sigaction = &ft_handler;
 	sign.sa_flags = SA_SIGINFO; 
 		// .sa_flags: directrices para el proceso cuando recibe la señal.
 		// SA_INFO: caundo se escribe SA_INFO se asume que la funcion manejadora está apuntada por sa_sigaction.
+	sigemptyset(&sign.sa_mask);
 	sigaddset(&sign.sa_mask, SIGUSR1); 
 		// sigaddset: Añade una señal a un conjunto, poniendo a uno el bit correspondiente.
 		// sa_mask: para cadda señal, mascara de señales a bloquear cuando se ejecuta la función manejadora de esta señal,
@@ -59,6 +59,7 @@ int	main(void)
 		// resumen: añade SIGURS1 a la lista .sa_mask, para cuando se ejecute ft_handler no pueda recibir nuevas señales de este tipo.
 
 	sigaddset(&sign.sa_mask, SIGUSR2); // sigaddset: añade una señal a un conjunto de señales
+	ft_printf("Welocme to Minitalk Server. \nThe PID Server is: %d \n", getpid()); //escribe el mensaje de bienvenida  y te muestra el PID por pantalla
 	while (1)
 	{
 		sigaction(SIGUSR1, &sign, NULL); // define la acción a realizar cuando se recibe una señal, es la versión POSIX de signal.
