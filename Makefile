@@ -10,41 +10,72 @@
 #                                                                              #
 # **************************************************************************** #
 
-SERVER = 		server.a
-CLIENTE = 		cliente.a
+# Nombre que van a tener los programas
+SERVER = server
+CLIENT = client
 
-SRC = 		cliente.c servidor.c 
+# Flags para compilar y librerías
+CFLAGS = -Wall -Werror -Wextra
+LIBFT = libft
+PRINTF = ft_printf
 
-# SRCBONUS =	cliente.c servidor_bonus.c
+# Flags para compilar este proyeto
+FLAGS = -Wall -Wextra -Werror -I$(PRINTF)/headers -I$(LIBFT)/headers -L$(PRINTF) -lftprintf -L$(LIBFT) -lft
 
+# Nombre de los Objs al compilar
 SERVER_OBJS = server.o
-CLIENTE_OBJS = cliente.o
+CLIENT_OBJS = client.o
 
-# LIBRERIAS
-PRINTF = Ft_printf
-LIBFT = Libft
+# Targets por defecto
+all: $(SERVER) $(CLIENT)
+	@echo "Minitalk está listo"
 
-# OBJTBONUS = $(SRCBONUS:.c=.o)
+# Target para el bonus, que depende del target all
+bonus: all
 
-CFLAGS = 	-Wall -Werror -Wextra -I$(PRINTF)/headers -I$(LIBFT)/headers -L$(PRINTF) -lftprintf -L$(LIBFT) -lft
+# Targets para construir el programa del server
+$(SERVER) : $(SERVER_OBJS)
+	# Compilar Libft
+	@make -s -C $(LIBFT)
+	# Compilar Ft_printf
+	@make -s -C $(PRINTF)
+	# Enlace de los ficheros Objs para crear el ejecutable del server
+	@gcc $(FLAGS) $(SERVER_OBJS) -o $(SERVER)
 
-all:		$(SERVER) $(CLIENTE)
-	@echo "Minital esta listo"
+# Targets para contruir el programa del client
+$(CLIENT): $(CLIENT_OBJS)
+	# Compilar Libft
+	@make -s -C $(LIBFT)
+	# Compilar Ft_printf
+	@make -s -C $(PRINTF)
+	# Enlace de los ficheros Objs para crear el ejecutable del server
+	@gcc $(FLAGS) $(CLIENT_OBJS) -o $(CLIENT)
 
-$(NAME):
-			gcc -c $(CFLAGS) $(SRC)
-			ar rcs $(NAME) $(OBJT)
+# Regla de patrones para crear archivos de objetos a partir del código fuente // ESTO QUE ES??
+%.o: %.c
+	# Compilar código fuente
+	@gcc $(CFLAGS) -c $< -o $@
 
+# Target para limpiar los objetos de compilación
 clean:
-			rm -f $(OBJT) $(OBJTBONUS)
+	# Limpiar Libft
+	@make fclean -s -C $(LIBFT)
+	# Limpiar Ft_printf
+	@make fclean -s -C $(PRINTF)
+	# Limpiar ficheros Objs
+	@rm -f $(SERVER_OBJS) $(CLIENT_OBJS)
+	@echo "Los Objs han sido eliminados"
 
-fclean: 	clean
-			rm -f $(NAME)
+# Taget para limpiarlo todo
+fclean: clean
+	# Limpiar ejecutables
+	@rm -f $(SERVER) $(CLIENT)
+	@echo "Los ejecutables han sido eliminados"
 
-# bonus:
-# 			gcc -c $(CFLAGS) $(SRCBONUS)
-# 			ar rcs $(NAME) $(OBJTBONUS)
+# Target para reconstruir el proyecto
+re: fclean all
 
-re: 		fclean all
+#Taregt para reconstruir el proyecto con la parte bonus
+rebonus: fclean all
 
-.PHONY: all clean fclean bonus re
+.PHONY: all bonus clean fclean re rebonus
